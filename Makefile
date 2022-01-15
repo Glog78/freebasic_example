@@ -18,7 +18,7 @@ $(OBJS): % : %.bas bin
 	- upx bin/$@
 
 $(OBJS_DEBUG) : %_debug : %.bas bin
-	fbc -g -nostrip -w all -mt -exx $< -x bin/$@
+	fbc -g -nostrip -w pedantic -mt -exx $< -x bin/$@
 
 ctags:
 	rm -f tags
