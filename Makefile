@@ -25,4 +25,4 @@ ctags:
 	- find . -type f -iname "*.bas" -o -iname "*.bi" | xargs ctags -G -a 
 
 clean:
-	rm -rf bin
+	rm -f $(OBJS:%=bin/%) $(OBJS_DEBUG:%=bin/%)
