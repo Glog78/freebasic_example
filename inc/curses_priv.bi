@@ -1,12 +1,11 @@
 ' author: mario gnad
-' last modified: 2022-01-15 09:18
+' last modified: 2022-01-16 07:23
 ' description:
 '
 ' licence:
 
-extern "c"
-  
-  namespace Curses
+namespace curses_priv 'privat don't use
+  extern "c"
     #define NCURSES_SIZE_T ushort
     #define NCURSES_WIDECHAR 0
   
@@ -47,7 +46,7 @@ extern "c"
       #endif
     end type
 
-    type _win_st
+    type win
       dim as NCURSES_SIZE_T _cury, _curx
       dim as NCURSES_SIZE_T _maxy, _maxx
       dim as ushort _flags
@@ -72,7 +71,7 @@ extern "c"
       dim as integer _parx
       dim as integer _pary
 
-      dim as _win_st ptr _parent
+      dim as win ptr _parent
 
       dim as pdat _pad_y
 
@@ -86,10 +85,14 @@ extern "c"
       #endif
     end type
 
-  end namespace
+    namespace test_another 'just to test ctag implementation
+      dim somethig as integer
+      sub nothing_to_see_here
+      end sub
+    end namespace
 
-  type CWindow as Curses._win_st
+  end extern
 
-end extern
+end namespace 'end of curses_priv namespace
 
 ' vim: bs=2 sw=2 ss=2 ts=2 nu et ft=basic

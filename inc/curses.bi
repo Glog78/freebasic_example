@@ -1,55 +1,56 @@
 ' author: mario gnad
-' last modified: 2022-01-15 09:21
+' last modified: 2022-01-16 07:18
 ' description:
 '   https://github.com/FreeBASIC-Extended-Library/fb-ext-lib/blob/master/include/freebasic/ext/database/drivers/sqlite3driver_int.bi 
 ' licence:
 
-#include once "curses_h.bi"
+#include once "curses_priv.bi"
 
-#inclib "curses"   
+namespace curses 'public use this
+  #inclib "curses"   
+  extern "c"
+  
+    using curses_priv
 
-extern "c"
-  declare function CInit alias "initscr" () as CWindow ptr
-  declare function CGetMaxX alias "getmaxx" (byval win as CWindow ptr) as integer
-  declare function CGetMaxY alias "getmaxy" (byval win as CWindow ptr) as integer
-  declare function CCreateWindow alias "newwin" (byval lines as integer, byval colums as integer, byval begin_y as integer, byval begin_x as integer) as CWindow ptr
-  declare function CCreateSubWindow alias "subwin" (byval win as CWindow ptr, byval lines as integer, byval colums as integer, byval begin_y as integer, byval begin_x as integer) as CWindow ptr
-  declare function CGetChar alias "getch" () AS UByte
+    declare function _Init alias "initscr" () as win ptr
+    declare function GetMaxX alias "getmaxx" (byval _win as win ptr) as integer
+    declare function GetMaxY alias "getmaxy" (byval _win as win ptr) as integer
+    declare function CreateWindow alias "newwin" (byval lines as integer, byval colums as integer, byval begin_y as integer, byval begin_x as integer) as win
+    declare function CreateSubWindow alias "subwin" (byval _win as win ptr, byval lines as integer, byval colums as integer, byval begin_y as integer, byval begin_x as integer) as win ptr
+    declare function GetChar alias "getch" () AS UByte
 
-  declare sub CEreaseTerm alias "erase" ()
-  declare sub CClearTerm alias "clear" ()
-  declare sub CEreaseWindow alias "werase" (byval win as CWindow ptr)
-  declare sub CClearWindow alias "wclear" (byval win as CWindow ptr)
-  declare sub CDeleteWindow alias "delwin" (byval win as CWindow ptr)
-  declare sub CExit alias "endwin" ()
-  declare sub CRefresTerm alias "refresh" ()
-  declare sub CRefreshWindow alias "wrefresh" (byval win as CWindow ptr)
-  declare sub CPrintTerm alias "printw" (byref _out as ZString)
-  declare sub CPrintWindow alias "wprintw" (byval win as CWindow ptr, byref _out as ZString)
-end extern
+    declare sub EreaseTerm alias "erase" ()
+    declare sub ClearTerm alias "clear" ()
+    declare sub EreaseWindow alias "werase" (byval _win as win ptr)
+    declare sub ClearWindow alias "wclear" (byval _win as win ptr)
+    declare sub DeleteWindow alias "delwin" (byval _win as win ptr)
+    declare sub _Exit alias "endwin" ()
+    declare sub RefresTerm alias "refresh" ()
+    declare sub RefreshWindow alias "wrefresh" (byval _win as win ptr)
+    declare sub PrintTerm alias "printw" (byref _out as ZString)
+    declare sub PrintWindow alias "wprintw" (byval _win as win ptr, byref _out as ZString)
 
-declare sub CursesTest
-
+  end extern
+end namespace
 
 sub CursesTest
-
   dim as WString * 13 str1 => "hello, world"
-  dim as CWindow ptr subwin,stdout=CInit()
+  dim as curses.win ptr subwin,stdout=curses._Init
   dim as integer subwin_max_x=0,subwin_max_y=0
 
-  print "terminal max x:";CGetMaxX(stdout);" | terminal max y:";CGetMaxY(stdout)
+  print "terminal max x:";Curses.GetMaxX(stdout);" | terminal max y:";Curses.GetMaxY(stdout)
 
-  CClearTerm
-  CPrintTerm(str1)
-  subwin=CCreateSubWindow(stdout,5,30,2,2)
-    subwin_max_x=CGetMaxX(subwin)
-    subwin_max_y=CGetMaxY(subwin)
-    CPrintWindow(subwin,str1)
-    CGetChar
-    CClearWindow(subwin)
-  CDeleteWindow(subwin)
-  CGetChar
-  CExit
+  curses.ClearTerm
+  curses.PrintTerm(str1)
+  subwin=curses.CreateSubWindow(stdout,5,30,2,2)
+    subwin_max_x=curses.GetMaxX(subwin)
+    subwin_max_y=curses.GetMaxY(subwin)
+    curses.PrintWindow(subwin,str1)
+    curses.GetChar
+    curses.ClearWindow(subwin)
+  curses.DeleteWindow(subwin)
+  curses.GetChar
+  curses._Exit
 
   print "subwin max x:";subwin_max_x;" | subwin max y:";subwin_max_y
 

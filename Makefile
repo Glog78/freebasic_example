@@ -1,3 +1,4 @@
+CTAGS=/home/mgnad/.local/share/ctags/bin/ctags
 SRCS=$(wildcard *.bas)
 OBJS=$(SRCS:%.bas=%)
 OBJS_DEBUG=$(patsubst %.bas, %_debug, $(SRCS))
@@ -22,7 +23,7 @@ $(OBJS_DEBUG) : %_debug : %.bas bin
 
 ctags:
 	rm -f tags
-	- find . -type f -iname "*.bas" -o -iname "*.bi" | xargs ctags -G -a 
+	$(CTAGS) --languages=Basic -R -G -a --kinds-basic=-v
 
 clean:
 	rm -f $(OBJS:%=bin/%) $(OBJS_DEBUG:%=bin/%)
