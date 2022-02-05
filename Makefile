@@ -23,7 +23,8 @@ $(OBJS_DEBUG) : %_debug : %.bas bin
 
 ctags:
 	rm -f tags
-	$(CTAGS) --languages=Basic -R -G -a --kinds-basic=-v
+	$(CTAGS) --languages=Basic --extras-basic=* -R 
+#	$(CTAGS) --languages=Basic --kinds-basic=-v --extras=+r -R 
 
 clean:
 	rm -f $(OBJS:%=bin/%) $(OBJS_DEBUG:%=bin/%)
